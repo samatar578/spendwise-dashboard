@@ -1,41 +1,46 @@
-# SpendWise Dashboard Shell — Week 4
+# SpendWise — Week 6 JavaScript Foundation
 
-The visual foundation of my SpendWise capstone project. This is a static dashboard layout built with CSS Grid, Flexbox, custom properties, and responsive design — no JavaScript yet.
+SpendWise is a personal budgeting dashboard. In Week 6, we added the JavaScript foundation — the ability to store data, collect user input, perform calculations, and display results.
 
-## What's Inside
-- **Sidebar** — Brand logo, name, and 5 navigation links arranged with Flexbox.
-- **Header** — Welcome message with notification and profile buttons in a Flexbox row.
-- **Six category cards** — Food, Transport, Rent, Entertainment, Savings, and Utilities, each showing a realistic static amount.
+## What the Project Does
+SpendWise helps a user track their monthly budget and expenses. It calculates the remaining balance, the percentage of the budget that has been spent, and displays a friendly status message about their spending.
 
-## Layout Techniques
-- **CSS Grid** for the overall page structure (`.dashboard`) using `grid-template-areas` for a sidebar + header + main layout, and `grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))` for the card grid.
-- **Flexbox** inside the sidebar, header, nav, and each card for one-dimensional alignment and spacing.
-- **No absolute positioning** used anywhere for layout.
+## JavaScript Concepts Implemented
+- **Variables** (`let`) for storing the user's name, budget, expenses, currency symbol, and status.
+- **Data types** — strings, numbers, and booleans.
+- **Template literals** (backticks) to build friendly, formatted messages.
+- **Functions** for reusable, organized logic.
+- **User input** via `window.prompt()`.
+- **Type conversion** using `Number()` to turn prompt strings into numbers.
+- **Validation** using `isNaN()` to detect invalid input.
+- **Conditionals** (`if / else if / else`) inside `getBalanceStatus()`.
+- **Math and formatting** — `Math.round()`, `toLocaleString()`.
 
-## Theming
-All colors are defined as CSS custom properties on `:root`:
-- `--brand-color` (teal), `--accent-color` (amber)
-- `--surface-color`, `--bg-color`
-- `--text-primary`, `--text-secondary`
-- `--border-color`, plus spacing and shadow tokens
+## How Variables Are Used
+- `userName` — string, holds the user's name.
+- `monthlyBudget` — number, holds the total monthly budget.
+- `totalExpenses` — number, holds the running total of expenses.
+- `currencySymbol` — string, used to format currency display.
+- `isBudgetActive` — boolean, tracks whether the tracker is active.
 
-## Responsive Design
-A `@media (max-width: 768px)` query collapses the layout to a single column:
-- Sidebar moves below the header
-- Nav items flow in a horizontal wrap
-- Cards stack vertically
+## How User Input Is Collected
+Two `prompt()` dialogs ask the user for:
+1. Their monthly budget.
+2. A new expense to add.
 
-Verified with the browser's DevTools Device Toolbar.
+The inputs arrive as **strings**, so `Number()` converts them to numeric values before any math is done. If the user enters text, `isNaN()` catches it and prints a friendly error.
 
-## Card Micro-interactions
-Cards lift and glow on both hover and keyboard focus:
-- `transform: translateY(-4px)`
-- `box-shadow` with brand-tinted depth
-- Duration: `220ms` (under the 250ms limit)
-- Also applied to nav items and icon buttons
+## How Calculations Are Performed
+- **Balance** = `budget - totalExpenses` (see `calculateBalance`)
+- **Spent percentage** = `(expenses / budget) * 100` (see `calculateSpentPercentage`)
+- **Updated expenses** = `oldExpenses + newExpense`
 
-## Stretch Goal: Dark Theme
-A `@media (prefers-color-scheme: dark)` block overrides only the `:root` variables — no other CSS changes are needed, so the whole dashboard adapts automatically to the user's system preference.
+## How Functions Organize the Code
+Four reusable functions keep the logic clean:
+- `calculateBalance()` — returns the remaining balance.
+- `calculateSpentPercentage()` — returns the % of budget spent.
+- `formatCurrency()` — returns a nicely formatted currency string.
+- `getBalanceStatus()` — returns a friendly status message.
 
-## How to View
-Open `index.html` in any modern browser. Try resizing the window or opening DevTools (F12) → Toggle Device Toolbar to see the responsive layout.
+## How to Run
+Open `index.html` in a browser. Open DevTools (F12) → **Console** tab to see the results. Answer the two prompts when they appear.
