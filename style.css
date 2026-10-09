@@ -1,0 +1,270 @@
+/* =========================================================
+   SpendWise Dashboard — Week 4
+   CSS Grid + Flexbox + Custom Properties + Responsive
+   ========================================================= */
+
+/* ---------- Theme tokens ---------- */
+:root {
+    --brand-color: #0d9488;         /* teal */
+    --accent-color: #f59e0b;        /* amber */
+    --surface-color: #ffffff;       /* card surface */
+    --bg-color: #f1f5f9;            /* page background */
+    --text-primary: #1e293b;        /* main text */
+    --text-secondary: #64748b;      /* muted text */
+    --border-color: #e2e8f0;
+    --radius: 12px;
+    --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 8px 20px rgba(13, 148, 136, 0.18);
+    --transition: 220ms ease;
+}
+
+/* Stretch goal: dark theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --brand-color: #2dd4bf;
+        --accent-color: #fbbf24;
+        --surface-color: #1e293b;
+        --bg-color: #0f172a;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --border-color: #334155;
+    }
+}
+
+/* ---------- Base ---------- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ---------- Dashboard grid layout ---------- */
+.dashboard {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main";
+    min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+    grid-area: sidebar;
+    background-color: var(--surface-color);
+    border-right: 1px solid var(--border-color);
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 1.6rem;
+}
+
+.brand-name {
+    font-size: 1.25rem;
+    color: var(--brand-color);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.nav-item:hover,
+.nav-item:focus {
+    background-color: var(--bg-color);
+    color: var(--brand-color);
+    outline: none;
+}
+
+.nav-item.active {
+    background-color: var(--brand-color);
+    color: #ffffff;
+}
+
+/* ---------- Header ---------- */
+.header {
+    grid-area: header;
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.header-title h2 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+}
+
+.header-subtitle {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color var(--transition), transform var(--transition);
+}
+
+.icon-btn:hover,
+.icon-btn:focus {
+    background-color: var(--brand-color);
+    color: #ffffff;
+    transform: translateY(-1px);
+    outline: none;
+}
+
+/* ---------- Main content ---------- */
+.main {
+    grid-area: main;
+    padding: 32px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* ---------- Card ---------- */
+.card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover,
+.card:focus {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    outline: none;
+    border-color: var(--brand-color);
+}
+
+.card-icon {
+    font-size: 1.8rem;
+}
+
+.card-title {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.card-amount {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 4px 0 0;
+}
+
+.card-note {
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ---------- Responsive: single column below 768px ---------- */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas:
+            "header"
+            "sidebar"
+            "main";
+    }
+
+    .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 18px;
+    }
+
+    .nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .nav-item {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    .header {
+        padding: 16px 20px;
+    }
+
+    .main {
+        padding: 20px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
