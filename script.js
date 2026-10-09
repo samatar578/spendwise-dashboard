@@ -1,57 +1,54 @@
 // =========================================================
-// SpendWise — Week 6 JavaScript Foundation
-// Variables, user input, calculations, and functions
+// SpendWise — Week 6 Interactive Dashboard
+// Conditionals, arrays, loops, DOM, events
 // =========================================================
 
-// ---------- 1. STORE APPLICATION DATA (variables) ----------
-// These represent SpendWise's core budgeting data.
-let userName = "Samatar";              // string
-let monthlyBudget = 50000;             // number — total budget in KES
-let totalExpenses = 15000;             // number — initial expenses
-let currencySymbol = "KES";            // string — used for formatting
-let isBudgetActive = true;             // boolean — is the tracker active?
+// ---------- 1. APPLICATION DATA ----------
+const currencySymbol = "KES";
+let monthlyBudget = 50000;
 
-console.log("=== SpendWise Budget Tracker ===");
-console.log(`Welcome, ${userName}!`);
-console.log(`Starting monthly budget: ${currencySymbol} ${monthlyBudget}`);
-console.log(`Starting expenses: ${currencySymbol} ${totalExpenses}`);
+// Array of expense records — each item is an object
+let expenses = [
+    { name: "Lunch at cafe", amount: 850, category: "Food" },
+    { name: "Matatu fare", amount: 200, category: "Transport" },
+    { name: "Monthly rent", amount: 12000, category: "Rent" }
+];
 
 // ---------- 2. REUSABLE FUNCTIONS ----------
 
 /**
- * Calculates the remaining balance.
- * @param {number} budget - The monthly budget
- * @param {number} expenses - Total expenses so far
- * @returns {number} Remaining balance
+ * Calculate the total of all expenses using a loop.
+ * @returns {number} Sum of all expense amounts
  */
-function calculateBalance(budget, expenses) {
-    return budget - expenses;
+function calculateTotalExpenses() {
+    let total = 0;
+    for (let i = 0; i < expenses.length; i++) {
+        total = total + expenses[i].amount;
+    }
+    return total;
 }
 
 /**
- * Calculates what percentage of the budget has been spent.
- * @param {number} budget - The monthly budget
- * @param {number} expenses - Total expenses so far
- * @returns {number} Percentage spent (rounded to 1 decimal place)
+ * Calculate the remaining balance.
+ * @returns {number} budget minus total expenses
  */
-function calculateSpentPercentage(budget, expenses) {
-    if (budget === 0) return 0; // avoid division by zero
-    return Math.round((expenses / budget) * 100 * 10) / 10;
+function calculateBalance() {
+    return monthlyBudget - calculateTotalExpenses();
 }
 
 /**
- * Formats a number as a currency string.
- * @param {number} amount - The amount to format
- * @returns {string} Formatted currency string
+ * Format a number as currency.
+ * @param {number} amount
+ * @returns {string}
  */
 function formatCurrency(amount) {
     return `${currencySymbol} ${amount.toLocaleString()}`;
 }
 
 /**
- * Returns a status message based on the balance.
- * @param {number} balance - The remaining balance
- * @returns {string} A friendly status message
+ * Return a friendly status message based on the balance (conditional).
+ * @param {number} balance
+ * @returns {string}
  */
 function getBalanceStatus(balance) {
     if (balance < 0) {
@@ -63,44 +60,95 @@ function getBalanceStatus(balance) {
     }
 }
 
-// ---------- 3. DISPLAY INITIAL RESULTS ----------
-let initialBalance = calculateBalance(monthlyBudget, totalExpenses);
-console.log("\n--- Current Status ---");
-console.log(`Remaining balance: ${formatCurrency(initialBalance)}`);
-console.log(`Spent: ${calculateSpentPercentage(monthlyBudget, totalExpenses)}% of budget`);
-console.log(getBalanceStatus(initialBalance));
+// ---------- 3. DOM MANIPULATION ----------
 
-// ---------- 4. COLLECT USER INPUT ----------
-// Ask the user for their budget and a new expense using prompts.
-// Note: window.prompt returns a string, so we convert with Number().
+/**
+ * Update the summary panel with the latest numbers.
+ */
+function updateSummary() {
+    const totalExpenses = calculateTotalExpenses();
+    const balance = calculateBalance();
 
-console.log("\n--- New Entry ---");
+    document.getElementById("summary-budget").textContent = formatCurrency(monthlyBudget);
+    document.getElementById("summary-expenses").textContent = formatCurrency(totalExpenses);
+    document.getElementById("summary-balance").textContent = formatCurrency(balance);
 
-let userBudgetInput = prompt("What is your monthly budget? (numbers only)", "50000");
-let userExpenseInput = prompt("Enter a new expense amount:", "3000");
+    const statusEl = document.getElementById("summary-status");
+    statusEl.textContent = getBalanceStatus(balance);
 
-// Convert strings to numbers
-let userBudget = Number(userBudgetInput);
-let newExpense = Number(userExpenseInput);
-
-// Validate the input
-if (isNaN(userBudget) || isNaN(newExpense)) {
-    console.log("❌ Invalid input. Please enter numeric values only.");
-} else {
-    // Update the application data
-    monthlyBudget = userBudget;
-    totalExpenses = totalExpenses + newExpense;
-
-    // Recalculate and display
-    let newBalance = calculateBalance(monthlyBudget, totalExpenses);
-    let spentPercent = calculateSpentPercentage(monthlyBudget, totalExpenses);
-
-    console.log(`\nUser entered budget: ${formatCurrency(monthlyBudget)}`);
-    console.log(`New expense added: ${formatCurrency(newExpense)}`);
-    console.log(`Total expenses: ${formatCurrency(totalExpenses)}`);
-    console.log(`Updated balance: ${formatCurrency(newBalance)}`);
-    console.log(`Spent: ${spentPercent}% of budget`);
-    console.log(getBalanceStatus(newBalance));
+    // Add a class based on status for styling (conditional)
+    if (balance < 0) {
+        statusEl.className = "summary-status danger";
+    } else if (balance < 5000) {
+        statusEl.className = "summary-status warning";
+    } else {
+        statusEl.className = "summary-status ok";
+    }
 }
 
-console.log("\n=== End of SpendWise report ===");
+/**
+ * Render the list of expenses on the page using a loop.
+ */
+function renderExpenses() {
+    const listEl = document.getElementById("expense-list");
+    listEl.innerHTML = "";  // clear before re-rendering
+
+    if (expenses.length === 0) {
+        listEl.innerHTML = "<li class='empty'>No expenses yet.</li>";
+        return;
+    }
+
+    for (let i = 0; i < expenses.length; i++) {
+        const expense = expenses[i];
+        const li = document.createElement("li");
+        li.className = "expense-item";
+        li.innerHTML = `
+            <span class="expense-name">${expense.name}</span>
+            <span class="expense-category">${expense.category}</span>
+            <span class="expense-amount">${formatCurrency(expense.amount)}</span>
+        `;
+        listEl.appendChild(li);
+    }
+}
+
+// ---------- 4. EVENT HANDLING ----------
+
+/**
+ * Handle the "Add Expense" form submission.
+ */
+function handleAddExpense(event) {
+    event.preventDefault(); // stop the page from reloading
+
+    const nameInput = document.getElementById("expense-name");
+    const amountInput = document.getElementById("expense-amount");
+    const categoryInput = document.getElementById("expense-category");
+
+    const name = nameInput.value.trim();
+    const amount = Number(amountInput.value);
+    const category = categoryInput.value;
+
+    // Conditional validation
+    if (name === "" || category === "" || isNaN(amount) || amount <= 0) {
+        alert("Please fill in all fields with valid values.");
+        return;
+    }
+
+    // Add the new expense object to the array
+    expenses.push({ name: name, amount: amount, category: category });
+
+    // Reset the form for the next entry
+    event.target.reset();
+
+    // Update the UI
+    updateSummary();
+    renderExpenses();
+}
+
+// ---------- 5. INITIALIZATION ----------
+
+// Attach the event listener to the form
+document.getElementById("expense-form").addEventListener("submit", handleAddExpense);
+
+// First render when the page loads
+updateSummary();
+renderExpenses();

@@ -29,7 +29,7 @@
     <header class="header">
         <div class="header-title">
             <h2>Welcome back, Samatar 👋</h2>
-            <p class="header-subtitle">Here's your financial overview for September</p>
+            <p class="header-subtitle">Here's your financial overview</p>
         </div>
         <div class="header-actions">
             <button class="icon-btn" aria-label="Notifications">🔔</button>
@@ -39,54 +39,53 @@
 
     <!-- MAIN CONTENT -->
     <main class="main">
-        <section class="cards">
 
-            <article class="card" tabindex="0">
-                <div class="card-icon">🍔</div>
-                <h3 class="card-title">Food</h3>
-                <p class="card-amount">$320.50</p>
-                <p class="card-note">12% under budget</p>
-            </article>
-
-            <article class="card" tabindex="0">
-                <div class="card-icon">🚌</div>
-                <h3 class="card-title">Transport</h3>
-                <p class="card-amount">$95.00</p>
-                <p class="card-note">8 trips this week</p>
-            </article>
-
-            <article class="card" tabindex="0">
-                <div class="card-icon">🏠</div>
-                <h3 class="card-title">Rent</h3>
-                <p class="card-amount">$800.00</p>
-                <p class="card-note">Paid on Sep 1</p>
-            </article>
-
-            <article class="card" tabindex="0">
-                <div class="card-icon">🎬</div>
-                <h3 class="card-title">Entertainment</h3>
-                <p class="card-amount">$45.75</p>
-                <p class="card-note">2 streaming services</p>
-            </article>
-
-            <article class="card" tabindex="0">
-                <div class="card-icon">💾</div>
-                <h3 class="card-title">Savings</h3>
-                <p class="card-amount">$500.00</p>
-                <p class="card-note">Goal: $2,000</p>
-            </article>
-
-            <article class="card" tabindex="0">
-                <div class="card-icon">💡</div>
-                <h3 class="card-title">Utilities</h3>
-                <p class="card-amount">$140.20</p>
-                <p class="card-note">Due Sep 25</p>
-            </article>
-
+        <!-- SUMMARY PANEL -->
+        <section class="summary">
+            <h3 class="summary-title">Budget Summary</h3>
+            <p>Monthly Budget: <span id="summary-budget">KES 0</span></p>
+            <p>Total Expenses: <span id="summary-expenses">KES 0</span></p>
+            <p>Remaining Balance: <span id="summary-balance">KES 0</span></p>
+            <p id="summary-status" class="summary-status">—</p>
         </section>
+
+        <!-- ADD EXPENSE FORM -->
+        <section class="add-expense">
+            <h3 class="add-expense-title">Add a New Expense</h3>
+            <form id="expense-form">
+                <label for="expense-name">Expense name</label>
+                <input type="text" id="expense-name" placeholder="e.g. Groceries" required>
+
+                <label for="expense-amount">Amount (KES)</label>
+                <input type="number" id="expense-amount" placeholder="e.g. 2500" min="0" step="0.01" required>
+
+                <label for="expense-category">Category</label>
+                <select id="expense-category" required>
+                    <option value="">-- Choose a category --</option>
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Savings">Savings</option>
+                    <option value="Utilities">Utilities</option>
+                </select>
+
+                <button type="submit" id="add-expense-btn">Add Expense</button>
+            </form>
+        </section>
+
+        <!-- EXPENSE LIST -->
+        <section class="expense-list-section">
+            <h3>Your Expenses</h3>
+            <ul id="expense-list" class="expense-list">
+                <!-- Expenses will be injected here by JavaScript -->
+            </ul>
+        </section>
+
     </main>
- 
+
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
